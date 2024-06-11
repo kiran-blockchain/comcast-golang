@@ -29,7 +29,9 @@ func PrepareItems(done <-chan bool) <-chan Item {
 		for _, item := range itemsToShip {
 			select {
 			case <-done:
+				fmt.Println("I am done")
 				return
+				
 			case items <- item:
 			}
 		}
@@ -44,6 +46,7 @@ func PackItems(done <-chan bool, items <-chan Item) <-chan int {
 		for item := range items {
 			select {
 			case <-done:
+				fmt.Println("I am done")
 				return
 			case packages <- item.ID:
 				time.Sleep(item.PackingEffort)
@@ -53,6 +56,7 @@ func PackItems(done <-chan bool, items <-chan Item) <-chan int {
 	}()
 	return packages
 }
+
 
 func main() {
 	done := make(chan bool)
