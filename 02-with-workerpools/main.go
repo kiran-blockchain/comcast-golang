@@ -25,6 +25,8 @@ func PrepareItems(done <-chan bool) <-chan Item {
 		Item{7, "Computer", 5 * time.Second},
 		Item{8, "Pint Glass", 3 * time.Second},
 		Item{9, "Watch", 2 * time.Second},
+		Item{10, "Watch", 2 * time.Second},
+		Item{11, "Watch", 2 * time.Second},
 	}
 	go func() {
 		for _, item := range itemsToShip {
@@ -89,8 +91,8 @@ func main() {
 
 	items := PrepareItems(done)
 
-	workers := make([]<-chan int, 4)
-	for i := 0; i < 4; i++ {
+	workers := make([]<-chan int, 5`	`)
+	for i := 0; i < 5; i++ {
 		workers[i] = PackItems(done, items, i)
 	}
 
@@ -98,6 +100,6 @@ func main() {
 	for range merge(done, workers...) {
 		numPackages++
 	}
-
-	fmt.Printf("Took %fs to ship %d packages\n", time.Since(start).Seconds(), numPackages)
+	fmt.Printf("Took %fs to ship %d packages\n", time.Since(start).Seconds(), )
+		
 }
