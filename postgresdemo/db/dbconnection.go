@@ -17,8 +17,8 @@ var (
 func GetDBConnection() *sql.DB {
 	once.Do(func() {
 		// Database connection string
-		//connStr := "user=ecom password=ecom1 dbname=ecom sslmode=disable"
-		connStr:="postgresql://ecom2:Ecom2#2024@SG-storm-bath-6462-5504-pgsql-master.servers.mongodirector.com:5432/ecom"
+		connStr := "host=SG-storm-bath-6462-5504-pgsql-master.servers.mongodirector.com user=ecom2 password=Ecom2#2024 dbname=ecom sslmode=disable"
+		//connStr:="postgresql://ecom2:Ecom2#2024@SG-storm-bath-6462-5504-pgsql-master.servers.mongodirector.com:5432/ecom"
 		// Open the connection
 		var err error
 		db, err = sql.Open("postgres", connStr)
