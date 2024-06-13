@@ -43,15 +43,15 @@ func (ps *ProfileService) Update(id uint,newEmail string) error{
 
 func (ps *ProfileService) GetOrdersByUserId() error {
 	var result [] struct{
-		UserId uint
+		Userid uint
 		Username string
 		Email string
-		OrderId uint
+		Orderid uint
 	}
-	ps.db.Table("users").Select("users.userid,users.username").Joins("INNER JOIN orders on users.userid = orders.userid")
+	ps.db.Table("users").Select("users.userId,users.username,orders.orderId").Joins("INNER JOIN orders on orders.userid = users.userid").Scan(&result)
 	
 	for _,row := range result{
-		fmt.Printf("UserId : %d, Name : %s orderId: %d",row.UserId,row.Username,row.OrderId)
+		fmt.Printf("UserId : %d, Name : %s orderId: %d",row.Userid,row.Username,row.Orderid)
 	}
 	
 	return nil
