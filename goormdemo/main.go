@@ -11,7 +11,8 @@ func main(){
 	profileService:= entities.NewProfileService(connStr)
 	//newProfile := &entities.Profile{Username: "Kiran PVS",Email: "kiran@gmail.com"}
 	//err:= profileService.Create(newProfile)
-	err:=profileService.Update(1,"kiran2@gmail.com")
+	//err:=profileService.Update(1,"kiran2@gmail.com")
+	err:= profileService.GetOrdersByUserId()
 	if(err!=nil){
 		log.Fatalf("Error in creating the user %v",err)
 	}
