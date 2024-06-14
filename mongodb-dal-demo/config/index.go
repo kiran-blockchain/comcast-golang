@@ -2,6 +2,7 @@ package config
 
 import (
 	"context"
+
 	//"fmt"
 	"log"
 	"mongodemo/constants"
@@ -25,4 +26,9 @@ func ConnectDataBase() (*mongo.Client,error){
 		return nil, err
 	}
 	return mongoClient,nil	
+}
+
+func GetCollection(client *mongo.Client,dbName string,collectionName string) *mongo.Collection{
+	collection := client.Database(dbName).Collection(collectionName)
+	return collection
 }
