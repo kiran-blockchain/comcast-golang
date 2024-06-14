@@ -17,7 +17,7 @@ func main(){
 	 profileService := services.ProfileServiceInit(profileCollection, ctx)
 	 profile:=entities.Profile{
 		Name: "kiran",
-		Email: "Kiran@gmail.com",
+		Email: "KiranTest2@gmail.com",
 	 }
 	 result,err:= profileService.CreateProfile(&profile)
 	 if(result!=nil){

@@ -2,9 +2,14 @@ package services
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"mongodemo/entities"
 	"mongodemo/interfaces"
+	"strings"
+	"time"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -18,23 +23,23 @@ func ProfileServiceInit(profileCollection *mongo.Collection,ctx context.Context)
 }
 
 func (p *ProfileService) CreateProfile(user *entities.Profile) (*entities.Profile, error) {
-	// user.CreatedAt = time.Now()
-	// user.UpdatedAt = user.CreatedAt
-	// user.Email = strings.ToLower(user.Email)
-	// user.PasswordConfirm = ""
-	// user.Verified = false
-	// user.Role = "user"
+	user.CreatedAt = time.Now()
+	user.UpdatedAt = user.CreatedAt
+	user.Email = strings.ToLower(user.Email)
+	user.PasswordConfirm = ""
+	user.Verified = false
+	user.Role = "user"
 
 	// //hashedPassword, _ := utils.HashPassword(user.Password)
-	// user.Password = user.Password
-	// res, err := p.ProfileCollection.InsertOne(p.ctx, &user)
+	 user.Password = user.Password
+	 res, err := p.ProfileCollection.InsertOne(p.Ctx, &user)
 
-	// if err != nil {
-	// 	if er, ok := err.(mongo.WriteException); ok && er.WriteErrors[0].Code == 11000 {
-	// 		return nil, errors.New("user with that email already exist")
-	// 	}
-	// 	return nil, err
-	// }
+	if err != nil {
+		if er, ok := err.(mongo.WriteException); ok && er.WriteErrors[0].Code == 11000 {
+			return nil, errors.New("user with that email already exist")
+		}
+		return nil, err
+	}
 
 	// // Create a unique index for the email field
 	// opt := options.Index()
@@ -45,13 +50,14 @@ func (p *ProfileService) CreateProfile(user *entities.Profile) (*entities.Profil
 	// 	return nil, errors.New("could not create index for email")
 	// }
 
-	// var newUser *models.DBResponse
-	// query := bson.M{"_id": res.InsertedID}
+	 var newUser *entities.Profile
+	 query := bson.M{"_id": res.InsertedID}
 
-	// err = p.ProfileCollection.FindOne(p.ctx, query).Decode(&newUser)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// return newUser, nil
-	return nil,nil
+	err = p.ProfileCollection.FindOne(p.Ctx, query).Decode(&newUser)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println(newUser.Email)
+	return newUser, nil
+	//return nil,nil
 }
