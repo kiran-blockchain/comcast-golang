@@ -24,6 +24,7 @@ var (
 )
 func initRoutes(){
   routes.Default(server)
+  
 }
 
 func initApp(mongoClient *mongo.Client){

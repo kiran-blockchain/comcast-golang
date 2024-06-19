@@ -9,7 +9,7 @@ import (
 
 var jwtKey = []byte("ComcastGOSecretKey")
 
-func ValidateDotken()gin.HandlerFunc{
+func ValidateToken()gin.HandlerFunc{
 	return func(c *gin.Context){
 		tokenString:= c.GetHeader("Authorization")
 		if tokenString ==""{

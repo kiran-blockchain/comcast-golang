@@ -50,6 +50,7 @@ func (u *UserController) Register(c *gin.Context){
 	
 }
 
-func (u *UserController) FetchProfile() {
+func (u *UserController) FetchProfile(c *gin.Context) {
+
 
 }

@@ -3,11 +3,21 @@ package routes
 
 import (
 	"rest-api/controllers"
+	"rest-api/middleware"
 
 	"github.com/gin-gonic/gin"
 )
 func UserRoutes(router *gin.Engine, controller controllers.UserController) {
-	router.POST("/api/login", controller.Login)
-	router.POST("/api/register", controller.Register)
-	router.DELETE("/api/profile", controller.UserService.FetchProfile)
+	auth:= router.Group("/auth")
+	{
+		auth.POST("login", controller.Login)
+		auth.POST("register", controller.Register)
+	}
+	user := router.Group("/user")
+	user.Use(middleware.ValidateToken())
+	{
+		user.GET("/profile",controller.FetchProfile)
+	}
+
+	
 }
