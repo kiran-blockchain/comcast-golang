@@ -5,4 +5,5 @@ import "mongodemo/entities"
 
 type IProfile interface {
 	CreateProfile(profile *entities.Profile) (*entities.Profile, error)
+	SearchProfiles()([]*entities.Profile,error)
 }

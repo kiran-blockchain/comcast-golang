@@ -6,7 +6,7 @@ import (
 	"log"
 	"mongodemo/config"
 	"mongodemo/constants"
-	"mongodemo/entities"
+	//"mongodemo/entities"
 	"mongodemo/interfaces"
 	"mongodemo/services"
 
@@ -33,18 +33,21 @@ func init(){
 }
 
 func main(){
-	 
-	 profile:=entities.Profile{
-		Name: "kiran",
-		Email: "KiranTest3@gmail.com",
-	 }
-	 result,err2:= profileService.CreateProfile(&profile)
-	 if(result!=nil){
-		fmt.Println("Profile Created")
-	 }
+	 _,err2:=profileService.SearchProfiles()
 	 if(err2!=nil){
-		fmt.Println("error in creating profile")
+		fmt.Println(err2)
 	 }
+	//  profile:=entities.Profile{
+	// 	Name: "kiran",
+	// 	Email: "KiranTest3@gmail.com",
+	//  }
+	//  result,err2:= profileService.CreateProfile(&profile)
+	//  if(result!=nil){
+	// 	fmt.Println("Profile Created")
+	//  }
+	//  if(err2!=nil){
+	// 	fmt.Println("error in creating profile")
+	//  }
 	 
 	
 	defer   mongoClient.Disconnect(ctx)

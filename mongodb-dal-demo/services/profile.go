@@ -61,3 +61,20 @@ func (p *ProfileService) CreateProfile(user *entities.Profile) (*entities.Profil
 	return newUser, nil
 	//return nil,nil
 }
+
+func (p *ProfileService) SearchProfiles()([]*entities.Profile,error){
+	var profiles []entities.Profile
+	cursor ,err := p.ProfileCollection.Find(p.Ctx,bson.M{"name":"anand"})
+
+	if err != nil {
+		return nil, err
+	}
+	err2:=cursor.All(p.Ctx,&profiles)
+	if(err2!=nil){
+		fmt.Println("Error iin reading the cursor")
+	}
+	for _,users := range profiles{
+		fmt.Printf("Name: %s \n",users.Name)
+	}
+	return nil,nil
+}
