@@ -32,6 +32,7 @@ func (u *UserController) Login(c *gin.Context){
 	 c.JSON(http.StatusOK,gin.H{"message":"Login Successful","token":result})
 	
 }
+
 func (u *UserController) Register(c *gin.Context){
 	var user models.User
 	//convert the posted object from the UI to JSON.
@@ -47,4 +48,8 @@ func (u *UserController) Register(c *gin.Context){
 	 }
 	 c.JSON(http.StatusOK,gin.H{"message":"User Created Successfully"})
 	
+}
+
+func (u *UserController) FetchProfile() {
+
 }
