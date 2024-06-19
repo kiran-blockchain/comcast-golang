@@ -10,6 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService struct {
@@ -31,6 +32,13 @@ func (u *UserService) Register(user *models.User) error {
 		return errors.New("user already exists")
 	}
 	//if the user is not existing create the user
+	//hash the password
+	hashedPwd, errInEncryption:= bcrypt.GenerateFromPassword([]byte(user.Password),bcrypt.DefaultCost) 
+	 if(errInEncryption!=nil){
+		fmt.Println("Erorr in incryption")
+		return errors.New("Error in Ecrypting Password")
+	 }
+	 user.Password= string(hashedPwd)
 	_,err = u.UserCollection.InsertOne(u.ctx,user)
 	
 	if(err!=nil){
@@ -41,16 +49,20 @@ func (u *UserService) Register(user *models.User) error {
 func (u *UserService) Login(user *models.User) (*models.User, error) {
 	 var result *models.User
 	filter :=bson.M{"username":user.Username,"password":user.Password}
+
+	
 	err:= u.UserCollection.FindOne(u.ctx,filter).Decode(&result)
-	if err!=nil{
-		return nil, errors.New("Invalid Credentials")
+	err2:= bcrypt.CompareHashAndPassword([]byte(user.Password),[]byte(result.Password))
+	
+	if err!=nil || err2!=nil{
+		return nil, errors.New("invalid Credentials")
 	}
 	return result, nil
 }
 func (u *UserService) FetchProfile(id string) (*models.User, error) {
 	objId,err :=primitive.ObjectIDFromHex(id)
 	if(err!=nil){
-		return nil,errors.New("Invalid user")
+		return nil,errors.New("invalid user")
 	}
 	filter :=bson.M{"_id": objId}
 	var existingUser *models.User
