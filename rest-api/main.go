@@ -32,14 +32,16 @@ func initApp(mongoClient *mongo.Client){
 
 	//profile service is dependent on table and the database .
 	profileCollection := mongoClient.Database(constants.DatabaseName).Collection("profiles")
+	userCollection := mongoClient.Database(constants.DatabaseName).Collection("users")
 	
 	//pass the table and database to the profile service as parameters
 	profileService := services.NewProfileServiceInit(profileCollection, ctx)
-	
+	userService := services.UserServiceInit(userCollection,ctx)
 	//inject the profile service as a depdency to the controller.
 	profileController := controllers.InitProfileController(profileService)
-
+	userController := controllers.UserControllerInit(userService)
 	routes.ProfileRoute(server,profileController)
+	routes.UserRoutes(server,userController)
 }
 
 
