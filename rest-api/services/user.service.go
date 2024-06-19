@@ -6,12 +6,18 @@ import (
 	"fmt"
 	"rest-api/interfaces"
 	"rest-api/models"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 )
+type Claims struct{
+	Username  string `json:"username"`
+	jwt.StandardClaims
+}
 
 type UserService struct {
 	UserCollection *mongo.Collection // database table
@@ -22,6 +28,7 @@ func UserServiceInit(collection *mongo.Collection, ctx context.Context) interfac
 
 	return &UserService{collection, ctx}
 }
+var jwtKey = []byte("ComcastGOSecretKey")
 func (u *UserService) Register(user *models.User) error {
 	//check if the user is existing?
 	existingUser := models.User{}
@@ -46,7 +53,7 @@ func (u *UserService) Register(user *models.User) error {
 	}
 	return nil
 }
-func (u *UserService) Login(user *models.User) (*models.User, error) {
+func (u *UserService) Login(user *models.User) (string, error) {
 	 var result *models.User
 	filter :=bson.M{"username":user.Username,"password":user.Password}
 
@@ -55,9 +62,24 @@ func (u *UserService) Login(user *models.User) (*models.User, error) {
 	err2:= bcrypt.CompareHashAndPassword([]byte(user.Password),[]byte(result.Password))
 	
 	if err!=nil || err2!=nil{
-		return nil, errors.New("invalid Credentials")
+		return "", errors.New("invalid Credentials")
 	}
-	return result, nil
+
+	//create Jwt Token
+	expirationTime := time.Now().Add(15* time.Minute)
+	claims:=&Claims{
+		Username: result.Username,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: expirationTime.Unix(),
+		},
+	}
+	token:= jwt.NewWithClaims(jwt.SigningMethodHS256,claims)
+    tokenString,err:= token.SignedString(jwtKey)
+	if err!=nil{
+		return "",errors.New("failed to generate token")
+	}
+
+	return tokenString, nil
 }
 func (u *UserService) FetchProfile(id string) (*models.User, error) {
 	objId,err :=primitive.ObjectIDFromHex(id)

@@ -29,7 +29,7 @@ func (u *UserController) Login(c *gin.Context){
 		c.JSON(http.StatusUnauthorized,gin.H{"error":err2.Error()})
 		return
 	 }
-	 c.JSON(http.StatusOK,gin.H{"message":"Login Successful","user":result})
+	 c.JSON(http.StatusOK,gin.H{"message":"Login Successful","token":result})
 	
 }
 func (u *UserController) Register(c *gin.Context){
