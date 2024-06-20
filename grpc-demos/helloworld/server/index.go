@@ -24,6 +24,7 @@ func main(){
 		log.Fatalf("failed to listen %v",err)
 	}
 	s := grpc.NewServer()
+	//map the proto buf server on to grpc
 	pb.RegisterGreeterServer(s,&server{})
 	err = s.Serve(lis)
 	 if(err!=nil){
