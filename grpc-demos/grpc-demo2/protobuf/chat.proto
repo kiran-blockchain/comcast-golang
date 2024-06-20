@@ -1,0 +1,14 @@
+syntax  = "proto3";
+
+option go_package = "grpc-demo2/chat";
+
+package  chat;
+
+service Chat {
+    rpc JoinChat (stream ChatMessage) returns (stream ChatMessage);
+}
+
+message ChatMessage {
+    string username =1;
+    string message =2;
+}
