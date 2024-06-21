@@ -1,0 +1,4 @@
+mode: set
+unit-testing/simpletesting/main.go:8.30,10.16 2 1
+unit-testing/simpletesting/main.go:10.16,12.3 1 1
+unit-testing/simpletesting/main.go:13.2,13.28 1 1
