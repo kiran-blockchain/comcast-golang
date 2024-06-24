@@ -2,7 +2,7 @@
 
 This repo contains just an example on how to use the Go trace and pprof tools. It aims at being short, simple, with clear commands and a short piece of code. It also contains some links to some more details articles. 
 
-## Profiling 
+## Profiling x
 
 Profiling based on CPU: 
 
