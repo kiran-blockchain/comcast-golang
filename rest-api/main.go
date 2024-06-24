@@ -12,6 +12,7 @@ import (
 
 	//	"rest-api/services"
 
+	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -47,6 +48,8 @@ func initApp(mongoClient *mongo.Client){
 
 func main(){
 	server = gin.Default()
+	
+	pprof.Register(server, "dev/pprof")
 	mongoclient,err :=config.ConnectDataBase()
 	defer   mongoclient.Disconnect(ctx)
 	if err!=nil{
